@@ -24,12 +24,12 @@ public class PostController {
     public List<Post> getAllPosts(){
         return this.postService.getAllPosts();
     }
-    @RequestMapping("/posts/{id}")
+    @RequestMapping("/getpostbyid/{id}")
     public Post getPost(@PathVariable Integer id){
         return this.postService.getPost(id);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value="/posts")
+    @RequestMapping(method = RequestMethod.POST, value="/posts/create")
     public String addPost(@RequestBody Post post){
         System.out.println(post.getTitle());//temp
         post.setDate(new Date());
@@ -37,7 +37,7 @@ public class PostController {
         String response ="{\"success\":true,\"message\":\"Post has been added successfully\"}";
         return response;
     }
-    @DeleteMapping("/posts/{id}")
+    @DeleteMapping("/posts/delete/{id}")
     public String deletePosts(@PathVariable Integer id){
         this.postService.deletePost(id);
         String response="{\"success\":true,\"message\":\"Post has been deleted successfully\"}";

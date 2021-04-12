@@ -3,24 +3,26 @@ package com.upgrad.blog.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name="users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String userName;
     private String password;
-    private String fullName;
-
-
+    private String role;
+    private boolean active;
 
     public User() {
         super();
     }
 
-    public User(Integer id, String userName, String password, String fullName) {
+    public User(Integer id, String userName, String password, String role, boolean active) {
         this.id = id;
         this.userName = userName;
         this.password = password;
-        this.fullName = fullName;
+        this.role = role;
+        this.active = active;
     }
 
     public Integer getId() {
@@ -47,11 +49,19 @@ public class User {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getRole() {
+        return role;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
