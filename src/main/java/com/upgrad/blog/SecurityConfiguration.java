@@ -31,9 +31,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         System.out.println("in configure(HttpSecurity httpSecurity)");
         httpSecurity.authorizeRequests()
                 .antMatchers("/post/delete").hasRole("ADMIN")
-                .antMatchers("/post/create").hasAnyRole("Admin", "User")
-                .antMatchers("/getpostbyid").hasAnyRole("Admin", "User")
-                .antMatchers("/post").hasAnyRole("Admin", "User")
+                .antMatchers("/post/create").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/getpostbyid").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/posts").hasRole("ADMIN")
                 .and().formLogin();
     }
 
