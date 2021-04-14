@@ -36,7 +36,7 @@ public class PostController {
     //@PreAuthorize("hasRole('ADMIN')") this can used at both method level and at class level
     //We have used it at method level in our example
     //hasAnyRole also can be used here instead of hasRole
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('USER')")
     @RequestMapping("/posts")   //localhsot:8080/posts - get (response is json)
     public List<Post> getUserPost(){
         User user = userService.getCurrentLoggedINUser();
@@ -68,6 +68,7 @@ public class PostController {
         String response ="{\"success\":true,\"message\":\"Post has been added successfully\"}";
         return response;
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/posts/{id}")
     public String deletePosts(@PathVariable Integer id){
         this.postService.deletePost(id);

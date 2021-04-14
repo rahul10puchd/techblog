@@ -7,17 +7,12 @@ import javax.persistence.*;
 public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private Integer id;
-
-    @Column(name="full_name")
     private String fullName;
-
-    @Column(name="email_address")
     private String emailAddress;
-
-    @Column(name="mobile_number")
     private String mobileNumber;
+    private String gender;
+    private String address;
 
     public Integer getId() {
         return id;
@@ -67,9 +62,4 @@ public class UserProfile {
         this.address = address;
     }
 
-    @Column(name="gender")
-    private String gender;
-
-    @Column(name="address")
-    private String address;
 }

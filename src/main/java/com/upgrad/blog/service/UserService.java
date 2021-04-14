@@ -1,5 +1,6 @@
 package com.upgrad.blog.service;
 
+import com.upgrad.blog.model.Post;
 import com.upgrad.blog.model.User;
 import com.upgrad.blog.model.UserDetailsImpl;
 import com.upgrad.blog.repository.UserRepository;
@@ -32,5 +33,11 @@ public class UserService {
         user.orElseThrow(() -> new UsernameNotFoundException(username+ "Not Found"));
         return user.map(User::new).get();
     }
-
+    public boolean isExistingUser(String userName){
+        Optional<User> user = userRepository.findByUserName(userName);
+        return user.isPresent();
+    }
+    public void save(User user){
+        this.userRepository.save(user);
+    }
 }
