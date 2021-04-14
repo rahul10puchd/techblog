@@ -3,6 +3,7 @@ package com.upgrad.blog.controller;
 import com.upgrad.blog.model.Post;
 import com.upgrad.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -20,6 +21,10 @@ public class PostController {
     /posts/id   - delete
     /posts/id   - put
     */
+    //@PreAuthorize("hasRole('ADMIN')") this can used at both method level and at class level
+    //We have used it at method level in our example
+    //hasAnyRole also can be used here instead of hasRole
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/posts")   //localhsot:8080/posts - get (response is json)
     public List<Post> getAllPosts(){
         return this.postService.getAllPosts();

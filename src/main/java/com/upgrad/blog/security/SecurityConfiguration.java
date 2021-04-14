@@ -1,42 +1,48 @@
 package com.upgrad.blog.security;
 
+import com.upgrad.blog.filters.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)//included this so that I can use @PreAuthorise Annotation in Controller
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Autowired
     UserDetailsService userDetailsService;
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
+    }
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-//         /posts      - get
-//                /posts/id   - get
-//                /posts      - post
-//                /posts/id   - delete
-//                /posts/id   - put getpostbyid
-        System.out.println("------------------------------------------");
-        System.out.println("in configure(HttpSecurity httpSecurity)");
-        httpSecurity.authorizeRequests()
-                .antMatchers("/post/delete").hasRole("ADMIN")
-                .antMatchers("/post/create").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/getpostbyid").hasAnyRole("ADMIN", "USER")
-                .antMatchers("/posts").hasRole("USER")
-                .and().formLogin();
-    }
+        httpSecurity.csrf().disable()
+                .authorizeRequests().antMatchers("/login").permitAll().
+                anyRequest().authenticated().and().
+                exceptionHandling().and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
+    }
     @Bean
     public PasswordEncoder getPasswordEncoder(){
         return NoOpPasswordEncoder.getInstance();
