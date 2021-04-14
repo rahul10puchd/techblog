@@ -1,12 +1,16 @@
 package com.upgrad.blog.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.*;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -14,6 +18,17 @@ public class Post {
     private String title;
     private String body;
     private Date date;
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JsonIgnoreProperties(allowSetters = true)
+    private User user;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties(allowSetters = true)
+    private List<Category> categories= new ArrayList<Category>();
+
+    @Transient
+    private String category;
+
     public Post() {
         super();
     }
@@ -26,11 +41,38 @@ public class Post {
         this.id = id;
     }
 
-    public Post(Integer id, String title, String body, Date date) {
+    public Post(Integer id, String title, String body, Date date, User user, List<Category> categories, String category) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.date = date;
+        this.user = user;
+        this.categories = categories;
+        this.category=category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getTitle() {

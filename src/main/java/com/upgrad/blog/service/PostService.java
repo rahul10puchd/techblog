@@ -16,6 +16,9 @@ public class PostService {
     public List<Post> getAllPosts(){
         return (List<Post>) this.postRepository.findAll();
     }
+    public List<Post> getAllPosts(int id){
+        return (List<Post>) this.postRepository.findAll();
+    }
 
     public Post getPost(Integer id){
         //try typecasting and observe the execution
