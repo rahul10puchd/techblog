@@ -32,6 +32,7 @@ public class PostController {
     //hasAnyRole also can be used here instead of hasRole
 
     //Here we will catch errors thrown by service
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/posts")   //localhsot:8080/posts - get (response is json)
     public ResponseEntity<List<Post>> getAllPosts(){
         List<Post> posts = null;
